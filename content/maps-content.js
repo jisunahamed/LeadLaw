@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener((msg) => {
 
   if (msg.action === "START_MAPS_SCRAPE") {
     if (isRunning && msg.runId && activeRunId === msg.runId) {
-      console.log("[Lead লও][Maps] Skip duplicate START_MAPS_SCRAPE for same run");
+      console.log("[Lead Low][Maps] Skip duplicate START_MAPS_SCRAPE for same run");
       return;
     }
     scrapeGeneration += 1;
@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener((msg) => {
     seenEmails.clear();
     seenWebsites.clear();
 
-    console.log("[Lead লও][Maps] Starting scrape run:", activeRunId, "limit:", limit);
+    console.log("[Lead Low][Maps] Starting scrape run:", activeRunId, "limit:", limit);
     (async () => {
       try {
         const { session } = await chrome.storage.local.get("session");
@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener((msg) => {
         }
       } catch (_) {}
       scrapeLeads(limit, myGen).catch((err) => {
-        console.error("[Lead লও][Maps] Fatal scrape error:", err);
+        console.error("[Lead Low][Maps] Fatal scrape error:", err);
         chrome.runtime.sendMessage({ action: "MAPS_DONE", localExhausted: true, totalCollected: 0 });
       });
     })();
@@ -95,7 +95,7 @@ async function scrapeLeads(limit, gen) {
     await waitForElement('[role="feed"]', 12000);
   } catch {
     if (gen !== scrapeGeneration) return;
-    requestReloadSearch("Results list not found — reloading search...");
+    requestReloadSearch("Results list not found - reloading search...");
     isRunning = false;
     return;
   }
@@ -109,7 +109,7 @@ async function scrapeLeads(limit, gen) {
     await waitIfPaused();
 
     if (!isOnGoogleMaps()) {
-      requestReloadSearch("Left Google Maps — reloading search...");
+      requestReloadSearch("Left Google Maps - reloading search...");
       isRunning = false;
       return;
     }
@@ -121,7 +121,7 @@ async function scrapeLeads(limit, gen) {
         sendStatus("Loading... internet may be slow. Waiting for more leads.");
       }
       if (stagnantRounds >= 10 && !document.querySelectorAll('[role="feed"]').length) {
-        requestReloadSearch("Results panel missing — reloading search...");
+        requestReloadSearch("Results panel missing - reloading search...");
         isRunning = false;
         return;
       }
@@ -129,7 +129,7 @@ async function scrapeLeads(limit, gen) {
       await sleep(850);
 
       if (hasFeedEndMarker() || stagnantRounds >= MAX_STAGNANT_ROUNDS) {
-    console.log("[Lead লও][Maps] Local list exhausted (end marker or stagnant).");
+        console.log("[Lead Low][Maps] Local list exhausted (end marker or stagnant).");
         break;
       }
       continue;
@@ -165,7 +165,7 @@ async function scrapeLeads(limit, gen) {
       if (isPlaceDetailRoute()) {
         await backToList();
         if (!resultsListRestored()) {
-          requestReloadSearch("Stuck on detail page — reloading...");
+            requestReloadSearch("Stuck on detail page - reloading...");
           isRunning = false;
           return;
         }
@@ -382,7 +382,7 @@ function isNonBusinessCategory(category) {
 }
 
 function pickNameFromListCard(anchor, card, lines) {
-  const aria = ((anchor && anchor.getAttribute("aria-label")) || "").split(/[·,•\n]/)[0].trim();
+  const aria = ((anchor && anchor.getAttribute("aria-label")) || "").split(/[.,\n]/)[0].trim();
   if (aria && !isJunkBusinessName(aria)) return aria;
   const sel =
     card.querySelector(".qBF1Pd, .fontHeadlineSmall .qBF1Pd, .fontHeadlineSmall")?.textContent?.trim() || "";
@@ -438,7 +438,7 @@ function extractLeadFromCard(item) {
       scrapedAt: new Date().toISOString()
     };
   } catch (err) {
-    console.warn("[Lead লও][Maps] Card text extraction failed:", err);
+    console.warn("[Lead Low][Maps] Card text extraction failed:", err);
     return null;
   }
 }
@@ -502,24 +502,24 @@ async function extractLeadWithDetailClick(item) {
       sendStatus("Getting back to the results list...");
       const ok = await waitForResultsListOrRecover(20000);
       if (!ok && sessionSearchUrl) {
-        requestReloadSearch("Could not return to search list — restoring...");
+        requestReloadSearch("Could not return to search list - restoring...");
         return null;
       }
     }
     return mergeLead(fromCard, fromDetail, item.link);
   } catch (err) {
-    console.warn("[Lead লও][Maps] Detail click extraction failed, fallback to card:", err);
+    console.warn("[Lead Low][Maps] Detail click extraction failed, fallback to card:", err);
     sendStatus("Detail loading slow. Using visible card data.");
     await backToList();
     if (!isOnGoogleMaps()) {
-      requestReloadSearch("Unexpected page after detail — reloading search...");
+      requestReloadSearch("Unexpected page after detail - reloading search...");
       return null;
     }
     if (!resultsListRestored()) {
       await waitForResultsListOrRecover(16000);
     }
     if (!resultsListRestored() && sessionSearchUrl) {
-      requestReloadSearch("Could not return to search list — restoring...");
+      requestReloadSearch("Could not return to search list - restoring...");
       isStopped = true; // Stop current loop to wait for reload
       return null;
     }
@@ -563,7 +563,7 @@ async function backToList() {
   if (resultsListRestored()) return;
 
   const backLabelRe =
-    /back|ফিরে|return|zurück|atrás|retour|indietro|terug|voltar|назад|返回|戻る|뒤로/iu;
+    /back|return/i;
 
   const tryBackClick = () => {
     const candidates = Array.from(
@@ -651,7 +651,7 @@ function normalizePlaceLink(raw) {
   }
 }
 
-/** Same Maps place from list vs detail URL — used to skip already-saved leads after reload. */
+/** Same Maps place from list vs detail URL - used to skip already-saved leads after reload. */
 function normalizePlaceIdentity(raw) {
   const base = normalizePlaceLink(raw);
   if (!base) return "";
@@ -767,7 +767,7 @@ class LiquidFloatingUI {
       <div class="lh-header" id="lh-drag-handle">
         <div class="lh-title">
           <img class="lh-logo" src="${chrome.runtime.getURL('logo.png')}" alt="" />
-          Lead লও
+          Lead Low
         </div>
         <div class="lh-controls">
           <button class="lh-btn-icon lh-toggle-btn" id="lh-minimize-btn" title="Minimize">
@@ -788,7 +788,7 @@ class LiquidFloatingUI {
           <span class="lh-status-pill lh-status-running" id="lh-status-pill">Running</span>
         </div>
         <div class="lh-log-container" id="lh-log">
-          <div class="lh-log-item">Initializing Lead লও...</div>
+          <div class="lh-log-item">Initializing Lead Low...</div>
         </div>
       </div>
       <div class="lh-footer">
