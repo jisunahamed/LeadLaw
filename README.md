@@ -21,6 +21,19 @@ It is designed for local, browser-based research workflows: no Google Maps API k
 
 Chrome cannot install the GitHub source ZIP by dragging it into `chrome://extensions`.
 
+### Option A: Install-ready ZIP
+
+Use `LeadLow-extension.zip` from this repository when you want a cleaner package.
+
+1. Download `LeadLow-extension.zip`.
+2. Extract/unzip it.
+3. Open Chrome and go to `chrome://extensions`.
+4. Enable **Developer mode**.
+5. Click **Load unpacked**.
+6. Select the extracted folder. It should contain `manifest.json` directly.
+
+### Option B: GitHub Source ZIP
+
 Use this flow instead:
 
 1. Download or clone this repository.
