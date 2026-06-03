@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Lead লও",
+  "version": "1.0.0",
+  "description": "Scrape Google Maps leads and auto-download as CSV.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "downloads"
+  ],
+  "host_permissions": [
+    "https://www.google.com/maps/*",
+    "https://maps.google.com/*",
+    "https://www.google.com.bd/maps/*"
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "action": {
+    "default_title": "Lead লও",
+    "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/maps/*",
+        "https://maps.google.com/*",
+        "https://www.google.com.bd/maps/*"
+      ],
+      "js": [
+        "content/maps-content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/floating-window.css",
+        "logo.png"
+      ],
+      "matches": [
+        "https://www.google.com/*",
+        "https://maps.google.com/*",
+        "https://www.google.com.bd/*"
+      ]
+    }
+  ]
+}

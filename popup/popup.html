@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lead লও</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section id="screen-config" class="screen active">
+        <header class="app-header">
+          <img class="brand-mark" src="../logo.png" alt="Lead লও" />
+          <div class="brand-copy">
+            <div class="eyebrow">Google Maps leads</div>
+            <h1>Lead লও</h1>
+            <p>Collect qualified leads to CSV</p>
+          </div>
+          <div id="global-state" class="state-pill idle">Idle</div>
+        </header>
+
+        <div class="stats-row">
+          <div class="stat">
+            <strong id="config-limit-preview">100</strong>
+            <span>target</span>
+          </div>
+          <div class="stat">
+            <strong id="quality-preview">Phone</strong>
+            <span>quality</span>
+          </div>
+          <div class="stat">
+            <strong>CSV</strong>
+            <span>output</span>
+          </div>
+        </div>
+
+        <section class="surface">
+          <div class="section-title">
+            <h2>Search</h2>
+            <span>Google Maps</span>
+          </div>
+
+          <label class="label" for="keyword">Keyword</label>
+          <input id="keyword" type="text" placeholder="Restaurant" autocomplete="off" />
+
+          <label class="label" for="location">Location</label>
+          <input id="location" type="text" placeholder="Dhaka, Bangladesh" autocomplete="off" />
+          <div class="chip-row" aria-label="Quick locations">
+            <button class="chip" type="button" data-location="Bangladesh">Bangladesh</button>
+            <button class="chip" type="button" data-location="Dhaka">Dhaka</button>
+            <button class="chip" type="button" data-location="Gulshan Dhaka">Gulshan</button>
+          </div>
+
+          <div class="limit-row">
+            <label class="label" for="lead-limit-slider">Lead limit</label>
+            <input id="lead-limit-number" type="number" min="1" max="1000" value="100" />
+          </div>
+          <input id="lead-limit-slider" type="range" min="1" max="1000" value="100" />
+        </section>
+
+        <section class="surface">
+          <div class="section-title">
+            <h2>Lead Quality</h2>
+            <span>skip weak leads</span>
+          </div>
+          <div class="segmented" aria-label="Required match mode">
+            <button id="quality-any" class="seg active" type="button" data-mode="any">Any selected</button>
+            <button id="quality-all" class="seg" type="button" data-mode="all">All selected</button>
+          </div>
+          <div id="required-toggles" class="require-grid"></div>
+        </section>
+
+        <details class="surface advanced">
+          <summary>
+            <span>CSV Columns</span>
+            <small id="columns-count">9 selected</small>
+          </summary>
+          <div class="utility-row">
+            <button id="select-essential-btn" class="text-btn" type="button">Essential</button>
+            <button id="select-all-fields-btn" class="text-btn" type="button">Select all</button>
+          </div>
+          <div id="field-toggles" class="field-grid"></div>
+        </details>
+
+        <p id="error-box" class="error hidden"></p>
+        <div class="action-bar">
+          <button id="start-btn" class="btn btn-primary">Start scraping</button>
+        </div>
+      </section>
+
+      <section id="screen-scraping" class="screen">
+        <header class="run-header">
+          <div>
+            <div class="eyebrow">Running</div>
+            <h1>Collecting leads</h1>
+          </div>
+          <div id="global-state-running" class="state-pill running">Running</div>
+        </header>
+        <section class="surface run-card">
+          <div class="counter-line">
+            <span id="maps-counter" class="big-counter">0 / 0</span>
+            <span id="maps-state-label" class="phase-badge">Running</span>
+          </div>
+          <div class="progress-track"><div id="maps-progress" class="progress-fill"></div></div>
+          <div id="ticker" class="ticker">Waiting for first lead...</div>
+          <div class="actions">
+            <button id="pause-btn" class="btn">Pause</button>
+            <button id="stop-btn" class="btn btn-danger">Stop</button>
+          </div>
+        </section>
+        <section class="surface">
+          <div class="section-title">
+            <h2>Activity</h2>
+            <span>latest</span>
+          </div>
+          <ul id="live-log" class="log"></ul>
+        </section>
+      </section>
+
+      <section id="screen-writing" class="screen">
+        <section class="surface run-card">
+          <div class="phase-badge">Preparing CSV</div>
+          <div id="sheets-counter" class="big-counter">Preparing CSV 0 / 0...</div>
+          <div class="progress-track"><div id="sheets-progress" class="progress-fill"></div></div>
+          <div id="sheets-state-label" class="ticker">Generating CSV file</div>
+        </section>
+      </section>
+
+      <section id="screen-complete" class="screen">
+        <section class="surface complete-card">
+          <div class="complete-icon">CSV</div>
+          <h2 id="complete-title">Completed Successfully</h2>
+          <p id="complete-summary">0 leads collected | 0 CSV rows exported</p>
+          <div class="actions stacked">
+            <button id="download-csv-btn" class="btn btn-primary">Download CSV again</button>
+            <button id="new-search-btn" class="btn">New search</button>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="./popup.js"></script>
+  </body>
+</html>
