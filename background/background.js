@@ -25,12 +25,12 @@ const runtimeState = {
 
 chrome.runtime.onInstalled.addListener(async () => {
   await chrome.storage.local.set({ session: { ...DEFAULT_SESSION } });
-  console.log("[Lead লও] Installed");
+  console.log("[Lead Law] Installed");
 });
 
 chrome.runtime.onMessage.addListener((msg, sender) => {
   if (!msg?.action) return;
-  console.log("[Lead লও] Message:", msg.action);
+  console.log("[Lead Law] Message:", msg.action);
   const senderTabId = sender?.tab?.id || null;
 
   if (msg.action === "START_SCRAPING") startScraping(msg.config).catch(handleError);
@@ -133,7 +133,7 @@ async function kickMapsScrapeAfterResume() {
   if (remaining <= 0) return;
   const url =
     session.mapsSearchUrl ||
-    `https://www.google.com/maps/search/${encodeURIComponent(`${session.config.keyword || ""} ${session.config.location || ""}`)}`;
+    self.LH_mapsSearchUrlForQuery(`${session.config.keyword || ""} ${session.config.location || ""}`);
   await sendMessageToTabWithRetry(
     tabId,
     {
@@ -161,7 +161,7 @@ async function handleMapsTabBootstrap(_msg, tabId) {
   if (remaining <= 0) return;
   const url =
     session.mapsSearchUrl ||
-    `https://www.google.com/maps/search/${encodeURIComponent(`${session.config.keyword || ""} ${session.config.location || ""}`)}`;
+    self.LH_mapsSearchUrlForQuery(`${session.config.keyword || ""} ${session.config.location || ""}`);
   await sendMessageToTabWithRetry(
     tabId,
     {
@@ -229,7 +229,7 @@ function startShiftMonitor() {
     const timeoutMs = 90000; // 1.5 minutes
 
     if (timeSinceLastLead > timeoutMs) {
-      console.log("[Lead লও] Shift timeout reached. Moving to next area.");
+      console.log("[Lead Law] Shift timeout reached. Moving to next area.");
       runtimeState.lastLeadCollectedAt = Date.now(); // Reset to avoid double trigger
       handleMapsDone({ localExhausted: true }).catch(handleError);
     }
@@ -356,7 +356,7 @@ async function handleMapsNeedReload(senderTabId) {
   const { session } = await chrome.storage.local.get("session");
   const url =
     session?.mapsSearchUrl ||
-    `https://www.google.com/maps/search/${encodeURIComponent(`${session?.config?.keyword || ""} ${session?.config?.location || ""}`)}`;
+    self.LH_mapsSearchUrlForQuery(`${session?.config?.keyword || ""} ${session?.config?.location || ""}`);
 
   broadcast({
     action: "PROGRESS_UPDATE",
@@ -412,7 +412,7 @@ async function handleMapsStatus(statusText) {
 async function exportCsvAndComplete(session, state) {
   await clearShiftMonitor();
   const csv = buildCsv(session.leads, session.config.selectedFields);
-  const filename = `lead-low-${Date.now()}.csv`;
+  const filename = `lead-law-${Date.now()}.csv`;
   await downloadCsv(csv, filename);
 
   const doneSession = {
@@ -578,7 +578,7 @@ async function safeCloseTab(tabId) {
   try {
     await chrome.tabs.remove(tabId);
   } catch (err) {
-    console.warn("[Lead লও] Could not close tab", tabId, err);
+    console.warn("[Lead Law] Could not close tab", tabId, err);
   }
 }
 
@@ -603,7 +603,7 @@ function broadcast(message) {
 }
 
 function handleError(err) {
-  console.error("[Lead লও] Error", err);
+  console.error("[Lead Law] Error", err);
   broadcast({ action: "ERROR", message: err?.message || "Unexpected error." });
 }
 

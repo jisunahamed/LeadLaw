@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   wireActions();
   await restoreSession();
   updateConfigPreview();
-  console.log("[Lead লও] Popup initialized");
+  console.log("[Lead Law] Popup initialized");
 });
 
 function renderFieldToggles() {
@@ -345,7 +345,7 @@ async function exportCsv() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `lead-low-${Date.now()}.csv`;
+  a.download = `lead-law-${Date.now()}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }

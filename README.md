@@ -1,10 +1,10 @@
-# Lead লও
+# Lead Law
 
-Lead লও is a Chrome extension for collecting qualified business leads from Google Maps and exporting them to CSV.
+Lead Law is an open-source Chrome extension for collecting qualified business leads from Google Maps and exporting them to CSV.
 
 <p>
-  <a href="https://github.com/jisunahamed/LeadLaw/raw/main/LeadLow-extension.zip">
-    <img src="https://img.shields.io/badge/Download-LeadLow--extension.zip-2563eb?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Download Lead লও extension ZIP" />
+  <a href="https://github.com/jisunahamed/LeadLaw/raw/main/LeadLaw-extension.zip">
+    <img src="https://img.shields.io/badge/Download-LeadLaw--extension.zip-2563eb?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Download Lead Law extension ZIP" />
   </a>
 </p>
 
@@ -13,7 +13,8 @@ It is designed for local, browser-based research workflows: no Google Maps API k
 ## Features
 
 - Search Google Maps by keyword and location.
-- Segment broad Bangladesh and Dhaka searches into smaller regions.
+- Segment broad Bangladesh and broad Dhaka searches into smaller regions.
+- Keep specific Dhaka searches specific, for example `shop Gulshan Dhaka` stays on Gulshan instead of starting from `Gulshan 1`.
 - Collect business name, phone, website, email, address, rating, reviews, category, and Maps URL.
 - Filter lead quality with `Any selected` or `All selected` rules.
 - Skip weak/non-business results such as localities, roads, buildings, and generic places.
@@ -21,17 +22,17 @@ It is designed for local, browser-based research workflows: no Google Maps API k
 - Pause, resume, stop, and export partial results safely.
 - Download CSV automatically when the run completes.
 - Floating progress panel inside Google Maps.
-- Dark premium UI using the Lead লও brand colors.
+- Premium dark UI using the Lead Law brand colors.
 
 ## Installation
 
 Chrome cannot install the GitHub source ZIP by dragging it into `chrome://extensions`.
 
-### Option A: Install-ready ZIP
+### Option A: Install-Ready ZIP
 
-Use `LeadLow-extension.zip` from this repository when you want a cleaner package.
+Use `LeadLaw-extension.zip` from this repository when you want a cleaner package.
 
-1. Download `LeadLow-extension.zip`.
+1. Download `LeadLaw-extension.zip`.
 2. Extract/unzip it.
 3. Open Chrome and go to `chrome://extensions`.
 4. Enable **Developer mode**.
@@ -48,14 +49,14 @@ Use this flow instead:
 4. Enable **Developer mode**.
 5. Click **Load unpacked**.
 6. Select the extracted folder that contains `manifest.json`.
-7. Pin **Lead লও** from the Chrome extensions toolbar.
+7. Pin **Lead Law** from the Chrome extensions toolbar.
 
 Do not select the `.zip` file itself. Chrome's **Load unpacked** needs a folder, not an archive.
 
 ## Usage
 
 1. Open the extension popup.
-2. Enter a keyword, for example `Restaurant`, `Real Estate`, or `Dentist`.
+2. Enter a keyword, for example `Restaurant`, `Real Estate`, `Dentist`, or `shop`.
 3. Enter a location, for example `Dhaka`, `Gulshan Dhaka`, or `Bangladesh`.
 4. Set the lead limit.
 5. Choose lead quality:
@@ -67,7 +68,7 @@ Do not select the `.zip` file itself. Chrome's **Load unpacked** needs a folder,
 
 ## Lead Quality Rules
 
-Lead লও can require one or more fields before saving a lead.
+Lead Law can require one or more fields before saving a lead.
 
 Examples:
 
@@ -82,7 +83,7 @@ Required fields are automatically included in the CSV export columns.
 CSV files are downloaded as:
 
 ```text
-lead-low-<timestamp>.csv
+lead-law-<timestamp>.csv
 ```
 
 The export includes a UTF-8 BOM and `sep=,` marker for better Excel compatibility.
@@ -131,6 +132,7 @@ Basic syntax check:
 
 ```bash
 node --check background/background.js
+node --check background/bd-search-segments.js
 node --check content/maps-content.js
 node --check popup/popup.js
 ```
@@ -144,7 +146,7 @@ node --check popup/popup.js
 
 ## Responsible Use
 
-Use Lead লও responsibly and lawfully.
+Use Lead Law responsibly and lawfully.
 
 - Respect website terms and local data protection laws.
 - Do not use harvested data for spam, harassment, or illegal activity.

@@ -200,9 +200,23 @@
     }
 
     const isDhaka = /\bdhaka\b/i.test(raw) || loc.includes("dhaka") || loc.includes("dacca");
+    const isBroadDhaka =
+      /^(all\s+)?dhaka(\s+bangladesh)?$/i.test(raw) ||
+      loc === "whole dhaka" ||
+      loc === "dhaka all areas" ||
+      loc === "all dhaka";
 
-    if (isDhaka && !bdOnly) {
-      const segments = DHAKA_AREAS.map((a) => `${kw} ${a} Dhaka Bangladesh`.trim());
+    if (isDhaka && isBroadDhaka && !bdOnly) {
+      const seen = new Set();
+      const segments = [singleQuery || `${kw} Dhaka Bangladesh`.trim()];
+      seen.add(segments[0].toLowerCase());
+      for (const area of DHAKA_AREAS) {
+        const query = `${kw} ${area} Dhaka Bangladesh`.trim();
+        const key = query.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        segments.push(query);
+      }
       return { mode: "dhaka_areas", segments };
     }
 
@@ -210,6 +224,6 @@
   };
 
   self.LH_mapsSearchUrlForQuery = function LH_mapsSearchUrlForQuery(query) {
-    return `https://www.google.com/maps/search/${encodeURIComponent(query)}`;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
   };
 })();

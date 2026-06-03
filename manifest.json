@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Lead লও",
+  "name": "Lead Law",
   "version": "1.0.0",
-  "description": "Scrape Google Maps leads and auto-download as CSV.",
+  "description": "Collect qualified Google Maps business leads and export them to CSV.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -19,7 +19,7 @@
     "service_worker": "background/background.js"
   },
   "action": {
-    "default_title": "Lead লও",
+    "default_title": "Lead Law",
     "default_popup": "popup/popup.html"
   },
   "icons": {

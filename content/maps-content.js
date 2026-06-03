@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener((msg) => {
 
   if (msg.action === "START_MAPS_SCRAPE") {
     if (isRunning && msg.runId && activeRunId === msg.runId) {
-      console.log("[Lead Low][Maps] Skip duplicate START_MAPS_SCRAPE for same run");
+      console.log("[Lead Law][Maps] Skip duplicate START_MAPS_SCRAPE for same run");
       return;
     }
     scrapeGeneration += 1;
@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener((msg) => {
     seenEmails.clear();
     seenWebsites.clear();
 
-    console.log("[Lead Low][Maps] Starting scrape run:", activeRunId, "limit:", limit);
+    console.log("[Lead Law][Maps] Starting scrape run:", activeRunId, "limit:", limit);
     (async () => {
       try {
         const { session } = await chrome.storage.local.get("session");
@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener((msg) => {
         }
       } catch (_) {}
       scrapeLeads(limit, myGen).catch((err) => {
-        console.error("[Lead Low][Maps] Fatal scrape error:", err);
+        console.error("[Lead Law][Maps] Fatal scrape error:", err);
         chrome.runtime.sendMessage({ action: "MAPS_DONE", localExhausted: true, totalCollected: 0 });
       });
     })();
@@ -79,12 +79,19 @@ async function scrapeLeads(limit, gen) {
   let collected = 0;
   let stagnantRounds = 0;
 
-  if (isPlaceDetailRoute() || !getSearchResultsFeed()?.querySelector(feedPlaceLinkSelector())) {
+  if (isPlaceDetailRoute() && sessionSearchUrl) {
+    sendStatus("Opening your exact search list...");
+    window.location.replace(sessionSearchUrl);
+    isRunning = false;
+    return;
+  }
+
+  if (!getSearchResultsFeed()?.querySelector(feedPlaceLinkSelector())) {
     sendStatus("Returning to your search list...");
     await waitForResultsListOrRecover(14000);
     if (isPlaceDetailRoute() && sessionSearchUrl) {
       try {
-        window.location.assign(sessionSearchUrl);
+        window.location.replace(sessionSearchUrl);
         isRunning = false;
         return;
       } catch (_) {}
@@ -129,7 +136,7 @@ async function scrapeLeads(limit, gen) {
       await sleep(850);
 
       if (hasFeedEndMarker() || stagnantRounds >= MAX_STAGNANT_ROUNDS) {
-        console.log("[Lead Low][Maps] Local list exhausted (end marker or stagnant).");
+        console.log("[Lead Law][Maps] Local list exhausted (end marker or stagnant).");
         break;
       }
       continue;
@@ -340,7 +347,10 @@ function isCurrentSearchAreaName(name) {
 function getCurrentSearchQueryParts() {
   const values = [];
   try {
-    const path = decodeURIComponent(new URL(sessionSearchUrl || window.location.href).pathname);
+    const url = new URL(sessionSearchUrl || window.location.href);
+    const query = url.searchParams.get("query");
+    if (query) values.push(query);
+    const path = decodeURIComponent(url.pathname);
     const match = path.match(/\/maps\/search\/([^/]+)/i);
     if (match) values.push(match[1]);
   } catch (_) {}
@@ -438,7 +448,7 @@ function extractLeadFromCard(item) {
       scrapedAt: new Date().toISOString()
     };
   } catch (err) {
-    console.warn("[Lead Low][Maps] Card text extraction failed:", err);
+    console.warn("[Lead Law][Maps] Card text extraction failed:", err);
     return null;
   }
 }
@@ -508,7 +518,7 @@ async function extractLeadWithDetailClick(item) {
     }
     return mergeLead(fromCard, fromDetail, item.link);
   } catch (err) {
-    console.warn("[Lead Low][Maps] Detail click extraction failed, fallback to card:", err);
+    console.warn("[Lead Law][Maps] Detail click extraction failed, fallback to card:", err);
     sendStatus("Detail loading slow. Using visible card data.");
     await backToList();
     if (!isOnGoogleMaps()) {
@@ -767,7 +777,7 @@ class LiquidFloatingUI {
       <div class="lh-header" id="lh-drag-handle">
         <div class="lh-title">
           <img class="lh-logo" src="${chrome.runtime.getURL('logo.png')}" alt="" />
-          Lead Low
+          Lead Law
         </div>
         <div class="lh-controls">
           <button class="lh-btn-icon lh-toggle-btn" id="lh-minimize-btn" title="Minimize">
@@ -788,7 +798,7 @@ class LiquidFloatingUI {
           <span class="lh-status-pill lh-status-running" id="lh-status-pill">Running</span>
         </div>
         <div class="lh-log-container" id="lh-log">
-          <div class="lh-log-item">Initializing Lead Low...</div>
+          <div class="lh-log-item">Initializing Lead Law...</div>
         </div>
       </div>
       <div class="lh-footer">
