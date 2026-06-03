@@ -19,12 +19,19 @@ It is designed for local, browser-based research workflows: no Google Maps API k
 
 ## Installation
 
+Chrome cannot install the GitHub source ZIP by dragging it into `chrome://extensions`.
+
+Use this flow instead:
+
 1. Download or clone this repository.
-2. Open Chrome and go to `chrome://extensions`.
-3. Enable **Developer mode**.
-4. Click **Load unpacked**.
-5. Select the `leadharvest` folder.
-6. Pin **Lead লও** from the Chrome extensions toolbar.
+2. If you downloaded a ZIP from GitHub, extract/unzip it first.
+3. Open Chrome and go to `chrome://extensions`.
+4. Enable **Developer mode**.
+5. Click **Load unpacked**.
+6. Select the extracted folder that contains `manifest.json`.
+7. Pin **Lead লও** from the Chrome extensions toolbar.
+
+Do not select the `.zip` file itself. Chrome's **Load unpacked** needs a folder, not an archive.
 
 ## Usage
 
