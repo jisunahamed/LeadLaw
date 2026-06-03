@@ -2,6 +2,12 @@
 
 Lead লও is a Chrome extension for collecting qualified business leads from Google Maps and exporting them to CSV.
 
+<p>
+  <a href="https://github.com/jisunahamed/LeadLaw/raw/main/LeadLow-extension.zip">
+    <img src="https://img.shields.io/badge/Download-LeadLow--extension.zip-2563eb?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Download Lead লও extension ZIP" />
+  </a>
+</p>
+
 It is designed for local, browser-based research workflows: no Google Maps API key, no Google Sheets API, and no OAuth setup required.
 
 ## Features
